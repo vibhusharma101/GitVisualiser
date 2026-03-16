@@ -17,6 +17,7 @@
     "@react-three/drei": "^9.88.16",
     "@react-three/fiber": "^8.15.11",
     "@react-three/postprocessing": "^2.15.11",
+    "@sentry/react": "^10.43.0",
     "chokidar": "^3.5.3",
     "cors": "^2.8.5",
     "express": "^4.18.2",
