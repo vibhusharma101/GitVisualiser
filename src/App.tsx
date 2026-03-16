@@ -5,6 +5,15 @@ import { EffectComposer, Bloom, Noise, Vignette } from '@react-three/postprocess
 import * as THREE from 'three';
 import { io } from 'socket.io-client';
 
+import * as Sentry from "@sentry/react";
+
+Sentry.init({
+  dsn: import.meta.env.VITE_SENTRY_DSN,
+  // Setting this option to true will send default PII data to Sentry.
+  // For example, automatic IP address collection on events
+  sendDefaultPii: true,
+});
+
 // ─── Socket (connects via Vite proxy → port 3002) ───────────────────────────
 // Use window.location so Vite proxy handles routing regardless of port
 const SOCKET_URL = import.meta.env.DEV
@@ -88,6 +97,24 @@ function buildLayout(rawCommits: RawCommit[], branchList: string[]): CommitNode[
     };
   });
 }
+
+// ─── Sentry Test Button ──────────────────────────────────────────────────────
+const ErrorButton = () => {
+  const [sent, setSent] = useState(false);
+
+  const handleClick = () => {
+    const err = new Error('Sentry test error — This is your first error!');
+    Sentry.captureException(err);
+    setSent(true);
+    setTimeout(() => setSent(false), 3000);
+  };
+
+  return (
+    <button className="sentry-test-btn" onClick={handleClick}>
+      {sent ? '✅ Sent to Sentry!' : '🐛 Test Sentry'}
+    </button>
+  );
+};
 
 // ─── Rotating Cube ────────────────────────────────────────────────────────────
 const CommitCube = ({ commit }: { commit: CommitNode }) => {
@@ -297,6 +324,7 @@ function App() {
           {status === 'error' && `❌ ${errorMsg}`}
         </div>
         <p className="hint">Drag to orbit · Scroll to zoom · Hover nodes</p>
+        <ErrorButton />
       </div>
 
       {/* Legend */}
@@ -388,6 +416,21 @@ function App() {
         .badge-live       { background: rgba(0,255,136,.15); color: #00ff88; border: 1px solid #00ff8855; }
         .badge-error      { background: rgba(255,50,50,.15);  color: #ff5555; border: 1px solid #ff555555; }
         .hint { font-size: 0.67rem; color: rgba(255,255,255,0.3); margin: 0; }
+
+        .sentry-test-btn {
+          margin-top: 0.7rem;
+          padding: 5px 12px; border-radius: 6px; font-size: 0.68rem;
+          font-family: 'JetBrains Mono', monospace; cursor: pointer;
+          background: rgba(255,60,60,0.12); color: #ff6b6b;
+          border: 1px solid rgba(255,60,60,0.4);
+          transition: all 0.2s ease;
+          pointer-events: all;
+        }
+        .sentry-test-btn:hover {
+          background: rgba(255,60,60,0.25); border-color: #ff6b6b;
+          box-shadow: 0 0 12px rgba(255,60,60,0.3);
+          transform: scale(1.04);
+        }
 
         .tip-box {
           position: absolute; bottom: 24px; left: 24px; z-index: 10;
