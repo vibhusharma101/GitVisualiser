@@ -98,7 +98,30 @@ function buildLayout(rawCommits: RawCommit[], branchList: string[]): CommitNode[
   });
 }
 
+const ErrorButton = () => {
+  const [sent, setSent] = useState(false);
 
+  const handleCapture = () => {
+    const err = new Error('Sentry test error — Managed capture');
+    Sentry.captureException(err);
+    setSent(true);
+    setTimeout(() => setSent(false), 3000);
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      <button className="sentry-test-btn" onClick={handleCapture}>
+        {sent ? '✅ Sent to Sentry!' : '🐛 Test Capture'}
+      </button>
+    </div>
+  );
+};
+  throw new Error("🚨 HARD CRASH: This is a render-time error");
+  return null;
+};
+
+// ─── Sentry Test Button ──────────────────────────────────────────────────────
+const ErrorButton = () => {
   const [sent, setSent] = useState(false);
   const [shouldCrash, setShouldCrash] = useState(true);
 
