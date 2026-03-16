@@ -103,7 +103,7 @@ const ErrorButton = () => {
   const [sent, setSent] = useState(false);
 
   const handleClick = () => {
-    const err = new Error('Sentry test error — This is your first error!');
+    const err = new Error('Sentry test error — This is an updated error message!');
     Sentry.captureException(err);
     setSent(true);
     setTimeout(() => setSent(false), 3000);
