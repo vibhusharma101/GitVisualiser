@@ -98,21 +98,39 @@ function buildLayout(rawCommits: RawCommit[], branchList: string[]): CommitNode[
   });
 }
 
+const CrashingComponent = () => {
+  throw new Error("🚨 HARD CRASH: This is a render-time error");
+  return null;
+};
+
 // ─── Sentry Test Button ──────────────────────────────────────────────────────
 const ErrorButton = () => {
   const [sent, setSent] = useState(false);
+  const [shouldCrash, setShouldCrash] = useState(true);
 
-  const handleClick = () => {
-    const err = new Error('Sentry test error — This is your first error!');
+  const handleCapture = () => {
+    const err = new Error('Sentry test error — Managed capture');
     Sentry.captureException(err);
     setSent(true);
     setTimeout(() => setSent(false), 3000);
   };
 
   return (
-    <button className="sentry-test-btn" onClick={handleClick}>
-      {sent ? '✅ Sent to Sentry!' : '🐛 Test Sentry'}
-    </button>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      <button className="sentry-test-btn" onClick={handleCapture}>
+        {sent ? '✅ Sent to Sentry!' : '🐛 Test Capture'}
+      </button>
+
+      <button
+        className="sentry-test-btn"
+        style={{ background: 'rgba(255,0,0,0.2)', color: '#ff4444', borderColor: 'rgba(255,0,0,0.5)' }}
+        onClick={() => setShouldCrash(true)}
+      >
+        💥 Hard Crash (Boundary)
+      </button>
+
+      {shouldCrash && <CrashingComponent />}
+    </div>
   );
 };
 
@@ -268,7 +286,7 @@ function App() {
   const [status, setStatus] = useState<'connecting' | 'live' | 'error'>('connecting');
   const [errorMsg, setErrorMsg] = useState('');
 
-  const [debugData, setDebugData] = useState<Record<string,string>>({});
+  const [debugData, setDebugData] = useState<Record<string, string>>({});
 
   useEffect(() => {
     socket.on('git-update', (data: {
@@ -290,7 +308,7 @@ function App() {
         commits.forEach(c => {
           ownerCount[c.branchOwner] = (ownerCount[c.branchOwner] ?? 0) + 1;
         });
-        const dbg: Record<string,string> = {};
+        const dbg: Record<string, string> = {};
         branches.forEach(b => { dbg[b] = `${ownerCount[b] ?? 0} commits`; });
         setDebugData(dbg);
       }
