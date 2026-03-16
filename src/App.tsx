@@ -99,8 +99,16 @@ function buildLayout(rawCommits: RawCommit[], branchList: string[]): CommitNode[
 }
 
 const CrashingComponent = () => {
-  throw new Error("🚨 HARD CRASH: This is a render-time error");
-  return null;
+  try {
+    return (
+      <div>
+        This is a crashing component
+      </div>
+    );
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
 };
 
 // ─── Sentry Test Button ──────────────────────────────────────────────────────
