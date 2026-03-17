@@ -101,8 +101,12 @@ function buildLayout(rawCommits: RawCommit[], branchList: string[]): CommitNode[
 const CrashingComponent = () => {
   const arr = [1]
   console.log("here")
-  console.log(arr[1].toFixed())
-  return <>{arr[1]}</>;
+  if (arr[1] !== undefined) {
+    console.log(arr[1].toFixed())
+  } else {
+    console.log('Cannot access undefined element')
+  }
+  return <>{arr[1] !== undefined ? arr[1] : null}</>;
 };
 
 // ─── Sentry Test Button ──────────────────────────────────────────────────────
