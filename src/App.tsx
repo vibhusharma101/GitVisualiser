@@ -99,8 +99,12 @@ function buildLayout(rawCommits: RawCommit[], branchList: string[]): CommitNode[
 }
 
 const CrashingComponent = () => {
-  throw new Error("🚨 HARD CRASH: This is a render-time error");
-  return null;
+  const arr = [1]
+  console.log("here")
+  if (arr.length > 1) {
+    console.log(arr[1].toFixed())
+  }
+  return <>{arr.length > 1 ? arr[1] : null}</>;
 };
 
 // ─── Sentry Test Button ──────────────────────────────────────────────────────
@@ -109,15 +113,6 @@ const ErrorButton = () => {
   const [shouldCrash, setShouldCrash] = useState(true);
 
   const handleCapture = () => {
-  try {
-    const err = new Error('Sentry test error — Managed capture');
-    Sentry.captureException(err);
-    setSent(true);
-    setTimeout(() => setSent(false), 3000);
-  } catch (e) {
-    console.error('Error in handleCapture:', e);
-  }
-}
     const err = new Error('Sentry test error — Managed capture');
     Sentry.captureException(err);
     setSent(true);
