@@ -99,22 +99,15 @@ function buildLayout(rawCommits: RawCommit[], branchList: string[]): CommitNode[
 }
 
 const CrashingComponent = () => {
-  const [value, setValue] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setValue((prevValue) => prevValue + 0.1);
-    }, 100);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div>
-      <h3>Crashing Component</h3>
-      <p>The value is: {value.toFixed(2)}</p>
-    </div>
-  );
+  const arr = [1, 2.5];
+  console.log("here");
+  console.log(arr[1].toFixed());
+  return <>{arr[1]}</>;
+};
+  const arr = [1]
+  console.log("here")
+  console.log(arr[1].toFixed())
+  return <>{arr[1]}</>;
 };
 
 // ─── Sentry Test Button ──────────────────────────────────────────────────────
