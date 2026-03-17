@@ -98,16 +98,14 @@ function buildLayout(rawCommits: RawCommit[], branchList: string[]): CommitNode[
   });
 }
 
-const CrashingComponent = () => {
+const SafeComponent = () => {
   try {
-    return (
-      <div>
-        This is a crashing component
-      </div>
-    );
+    // Wrap the problematic code in a try/catch block
+    return <div>This component is now safe!</div>;
   } catch (error) {
+    // Handle the error gracefully, e.g. log it to Sentry
     Sentry.captureException(error);
-    return null;
+    return <div>Oops, an error occurred!</div>;
   }
 };
 
