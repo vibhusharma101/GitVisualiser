@@ -98,15 +98,20 @@ function buildLayout(rawCommits: RawCommit[], branchList: string[]): CommitNode[
   });
 }
 
-const SafeComponent = () => {
-  try {
-    // Wrap the problematic code in a try/catch block
-    return <div>This component is now safe!</div>;
-  } catch (error) {
-    // Handle the error gracefully, e.g. log it to Sentry
-    Sentry.captureException(error);
-    return <div>Oops, an error occurred!</div>;
+const CrashingComponent = () => {
+  const arr = [1];
+  console.log("here");
+  if (arr[1] !== undefined) {
+    console.log(arr[1].toFixed());
+  } else {
+    console.log("Index 1 does not exist in the array");
   }
+  return <>{arr[1]}</>;
+};
+  const arr = [1]
+  console.log("here")
+  console.log(arr[1].toFixed())
+  return <>{arr[1]}</>;
 };
 
 // ─── Sentry Test Button ──────────────────────────────────────────────────────
