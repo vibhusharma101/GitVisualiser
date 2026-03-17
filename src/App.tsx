@@ -99,8 +99,15 @@ function buildLayout(rawCommits: RawCommit[], branchList: string[]): CommitNode[
 }
 
 const CrashingComponent = () => {
-  const value = 42;
-  return <div>The value is {value.toFixed(2)}</div>;
+  const arr = [1];
+  console.log("here");
+  console.log(arr[0].toFixed());
+  return <>{arr[0]}</>;
+};
+  const arr = [1]
+  console.log("here")
+  console.log(arr[1].toFixed())
+  return <>{arr[1]}</>;
 };
 
 // ─── Sentry Test Button ──────────────────────────────────────────────────────
