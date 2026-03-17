@@ -109,6 +109,15 @@ const ErrorButton = () => {
   const [shouldCrash, setShouldCrash] = useState(true);
 
   const handleCapture = () => {
+  try {
+    const err = new Error('Sentry test error — Managed capture');
+    Sentry.captureException(err);
+    setSent(true);
+    setTimeout(() => setSent(false), 3000);
+  } catch (e) {
+    console.error('Error in handleCapture:', e);
+  }
+}
     const err = new Error('Sentry test error — Managed capture');
     Sentry.captureException(err);
     setSent(true);
